@@ -1,0 +1,165 @@
+1. Problem Statement
+
+House prices are influenced by several factors such as income, location, number of rooms, population, housing age, and distance from important locations. The purpose of this project is to analyze a publicly available California housing dataset and develop a supervised machine learning model that can predict the median house value using the available numerical features.
+The project also aims to apply statistical concepts such as descriptive statistics, correlation analysis, outlier detection, and regression-based evaluation to understand the dataset before building the prediction model.
+
+2. Objectives
+
+1.	Understand the structure and characteristics of the California housing dataset.
+2.	Check and preprocess the data for missing values, duplicate records, invalid values, and potential outliers.
+3.	Perform exploratory data analysis using descriptive statistics and correlation analysis.
+4.	Build a supervised learning model using Linear Regression.
+5.	Evaluate the model using MAE, RMSE, and R².
+6.	Interpret the model results and identify important relationships in the data.
+
+3. Dataset Description
+
+The project uses a publicly available California housing dataset stored as "California_Houses.csv". The dataset contains 20,640 observations and 14 variables. The target variable is "Median_House_Value", while the remaining 13 variables are used as input features.
+Note: The exact public URL/source page for the particular modified CSV used in this project should be entered here if required by the college. The report does not assume a source name that has not been verified.
+
+3.1 Variables
+
+Variable	            Type	             Description
+Median_House_Value	    Target	        Median value of houses
+Median_Income	        Feature		    Median income of the area
+Median_Age				Feature			Median age of houses
+Tot_Rooms				Feature			Total number of rooms
+Tot_Bedrooms			Feature			Total number of bedrooms
+Population				Feature			Population of the area
+Households				Feature			Number of households
+Latitude				Feature			Latitude of the location
+Longitude				Feature			Longitude of the location
+Distance_to_coast		Feature			Distance from the coast
+Distance_to_LA			Feature			Distance from Los Angeles
+Distance_to_SanDiego	Feature			Distance from San Diego
+Distance_to_SanJose		Feature			Distance from San Jose
+Distance_to_SanFran		Feature			Distance from San Francisco
+
+
+3.2 Target Variable
+
+`Median_House_Value` is the target variable because the project aims to predict a continuous numerical house value. Therefore, this is a supervised learning regression problem.
+
+4. Tools and Technologies Used
+
+•	Python
+•	Pandas – data loading, inspection, and manipulation
+•	NumPy – numerical calculations
+•	Matplotlib – data visualization
+•	Seaborn – exploratory visualization support
+•	Scikit-learn – train-test split, Linear Regression, and model evaluation
+•	Jupyter Notebook / VS Code – development environment
+
+5. Data Preprocessing
+
+Before applying machine learning, the dataset was inspected to identify common data-quality issues. The preprocessing stage focused on understanding the data rather than unnecessarily removing observations.
+
+5.1 Dataset Shape and Data Types
+
+The dataset contains 20,640 rows and 14 columns. All variables are numerical, so no categorical encoding was required.
+
+5.2 Missing Values
+
+The missing-value check using `isnull().sum()` showed zero missing values in every column. Therefore, no rows or columns needed to be removed or imputed.
+
+5.3 Duplicate Records
+
+The duplicate-record check returned 0 duplicate rows. Therefore, no duplicate observations were removed.
+
+5.4 Invalid Values and Range Checks
+
+Minimum and maximum values were examined for all variables. No obvious impossible values were identified. For example, population, rooms, bedrooms, and households were positive, while the latitude and longitude values were within plausible geographic ranges for California.
+
+5.5 Outlier Check
+
+Potential outliers were identified using the Interquartile Range (IQR) method. Some variables, including Median_House_Value, Median_Income, Tot_Rooms, Tot_Bedrooms, Population, Households, and Distance_to_coast, contained observations outside the IQR-based limits.
+These observations were not automatically deleted because an IQR flag does not necessarily mean that an observation is incorrect. In a housing dataset, unusually large homes, populations, incomes, or distances can represent legitimate observations. Therefore, no records were removed unless a clear data error was identified.
+
+6. Exploratory Data Analysis (EDA)
+6.1 Descriptive Statistics of Target Variable
+Statistic	Value
+Count	20,640
+Mean	206,855.82
+Standard Deviation	115,395.62
+Minimum	14,999
+25th Percentile	119,600
+Median	179,700
+75th Percentile	264,725
+Maximum	500,001
+The mean house value is higher than the median, indicating that the target distribution is not perfectly symmetric and has a tendency toward higher values. The maximum value of 500,001 also indicates an upper limit in the target data that should be considered when interpreting predictions.
+
+6.2 Correlation Analysis
+Feature	Correlation with Median_House_Value
+Median_Income	0.688075
+Distance_to_coast	-0.469350
+Distance_to_LA	-0.130678
+Latitude	-0.144160
+Tot_Rooms	0.134153
+Median_Age	0.105623
+Households	0.065843
+Tot_Bedrooms	0.050594
+Population	-0.024650
+Distance_to_SanDiego	-0.092510
+Distance_to_SanJose	-0.041590
+Distance_to_SanFrancisco	-0.030559
+Longitude	-0.045967
+Median_Income shows the strongest positive linear relationship with Median_House_Value, with a correlation of approximately 0.688. Distance_to_coast shows a moderate negative correlation of approximately -0.469. Tot_Rooms has a relatively weak positive correlation of approximately 0.134. Several other variables have correlations close to zero, indicating weak individual linear relationships with the target.
+Correlation describes association and does not establish causation. A low individual correlation also does not necessarily mean that a feature is useless in a multivariable prediction model.
+
+
+7. Model Building
+7.1 Feature and Target Separation
+The target column `Median_House_Value` was separated from the remaining 13 input features.
+X shape: (20,640, 13)
+y shape: (20,640,)
+
+7.2 Train-Test Split
+The dataset was divided into training and testing sets using an 80:20 split. The training set was used to learn the model parameters, while the test set was kept separate for evaluating performance on unseen observations.
+Dataset Part	Shape
+Training features (X_train)	16,512 × 13
+Testing features (X_test)	4,128 × 13
+Training target (y_train)	16,512
+Testing target (y_test)	4,128
+
+7.3 Linear Regression
+Linear Regression was selected as the supervised learning algorithm because the target variable is continuous and numerical. The model learns a linear relationship between the 13 input features and the median house value.
+The model was trained using `X_train` and `y_train`. Predictions were then generated for `X_test`.
+
+8. Model Evaluation
+The trained Linear Regression model was evaluated using Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and R² Score. These metrics were calculated using the 4,128 unseen test observations.
+Metric	Result	Interpretation
+Mean Absolute Error (MAE)	51,611.40	Average absolute difference between predicted and actual values.
+Root Mean Squared Error (RMSE)	70,458.20	Measures prediction error while giving greater weight to larger errors.
+R² Score	0.6212	Indicates that approximately 62.12% of the variation in house values is explained by the model on the test set.
+The MAE of 51,611.40 means that the model's predictions differ from the actual house values by about 51,611 units on average in absolute terms. The RMSE is higher than the MAE because RMSE penalizes larger errors more strongly. The R² score of 0.6212 indicates that the model explains approximately 62.12% of the variation in the target variable for the test data.
+R² should not be described as prediction accuracy. It measures the proportion of variation explained by the regression model.
+
+
+9. Model Interpretation
+The model coefficients provide information about the direction and size of the linear relationship between each feature and the predicted house value, while keeping the other features constant.
+Feature	Coefficient	Direction
+Median_Income	39,578.67	Positive
+Median_Age	978.57	Positive
+Tot_Bedrooms	102.92	Positive
+Households	51.59	Positive
+Distance_to_SanDiego	0.06	Positive
+Distance_to_SanJose	0.03	Positive
+Distance_to_SanFrancisco	-0.09	Negative
+Distance_to_LA	-0.15	Negative
+Distance_to_coast	-0.62	Negative
+Tot_Rooms	-6.37	Negative
+Population	-39.87	Negative
+Latitude	-116.88	Negative
+Longitude	-200.17	Negative
+Median_Income has the largest positive coefficient in the fitted model. This is consistent with its strong positive correlation with house value. Distance_to_coast has a negative coefficient, meaning that, after accounting for the other variables in the linear model, greater distance from the coast is associated with a lower predicted value.
+Coefficient magnitudes should not be compared directly as a simple measure of feature importance because the variables use very different units and scales. The coefficients describe the fitted linear relationship in the original units of the dataset.
+
+
+10. Conclusion
+This project analyzed a California housing dataset and applied statistical and supervised machine learning techniques to predict median house value. The dataset contained 20,640 observations and 14 numerical variables, including one target variable and 13 input features.
+The data preprocessing checks found no missing values or duplicate records, and no clear invalid values were identified. Potential outliers were detected using the IQR method, but they were retained because they could represent legitimate housing observations.
+Exploratory analysis showed that Median_Income had the strongest positive correlation with house value, while Distance_to_coast showed a moderate negative correlation. A Linear Regression model was then trained using an 80:20 train-test split.
+On the test dataset, the model achieved an MAE of 51,611.40, an RMSE of 70,458.20, and an R² score of 0.6212. This means that the model explains approximately 62.12% of the variation in house values in the test data. The results demonstrate how statistical analysis and supervised learning can be combined to study and predict housing values.
+
+
+
